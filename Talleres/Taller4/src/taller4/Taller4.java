@@ -24,7 +24,7 @@ public class Taller4 {
         System.out.println(pot(2, 8));;
         primo(8);
         primo(7);
-        hora(1000);
+        hora(75);
         cuadratica(32, 56, 16);
     }
     public static void parimpar(int a) {
