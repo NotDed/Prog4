@@ -24,7 +24,15 @@ import java.util.Scanner;
  * @author Alejandro Serna Olarte <daniel.serna.olarte at gmail.com>
  */
 public class Generadores {
+
     
+    /**
+     * Este método verifica que el archivo haya sido creado con una arraylist 
+     * en el previniendo errores por la inexistencia del archivo sobre el cual
+     * se trabajará
+     * @param a archivo principal
+     * @throws IOException 
+     */
     public static void verificar(File a) throws IOException{
         ArrayList<Contacto> arreglo = new ArrayList<>();
         if(!a.exists()){
@@ -32,6 +40,13 @@ public class Generadores {
         }
     }
     
+    /**
+     * Este método extrae el arraylist de el archivo.
+     * @param a archivo principal
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static ArrayList<Contacto> extraer(File a) throws ClassNotFoundException, IOException{
         ObjectInputStream ois = null;
         ArrayList<Contacto> v = new ArrayList<>();
@@ -47,7 +62,12 @@ public class Generadores {
         return v;
     } 
     
-    
+    /**
+     * Este método reescribe el arraylist sobre el archivo.
+     * @param a archivo principal
+     * @param v arraylist principal
+     * @throws IOException 
+     */
     public static void escritura(File a, ArrayList<Contacto> v)throws  IOException{
         FileOutputStream fos = new FileOutputStream(a);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -55,7 +75,14 @@ public class Generadores {
         oos.close();
     }
     
-    
+    /**
+     * esta función extrae el arraylist del archivo le añade un nuevo
+     * objeto(insercion) y finalmente lo reescribe sobre el archivo.
+     * @param a archivo principal
+     * @param insercion objeto que se desea insertar
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void agregar(File a, Contacto insercion) throws ClassNotFoundException, IOException {
        ArrayList<Contacto> v;
         v = extraer(a);
@@ -63,6 +90,14 @@ public class Generadores {
         escritura(a, v);
     }
     
+    /**
+     * Este método extrae el arraylist del archivo le elimina un elemento
+     * (el que este en la posicion index) y finalment lo reescribe.
+     * @param a archivo principal
+     * @param index indice de posición del elemento que se desea eliminar
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void eliminar(File a,int index) throws ClassNotFoundException, IOException{
         ArrayList<Contacto> v;
         v = extraer(a);
@@ -70,6 +105,16 @@ public class Generadores {
         escritura(a, v);
     }
     
+    /**
+     * esta función retorna el indice de un contacto relacionado a un telefono
+     * en especifico en caso de que exista, de lo contrario se retornará -1
+     * indicando que el telefono no se encontró.
+     * @param a archivo principal
+     * @param telefono telefono al cual se le hará la busqueda
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static int buscar_numero(File a, String telefono) throws ClassNotFoundException, IOException{
         ArrayList<Contacto> v = extraer(a);
         Contacto temporal;
@@ -89,6 +134,14 @@ public class Generadores {
         return -1;
     }
     
+    /**
+     * Este método retorna el indice de un telefono buscado en un sub arraylist
+     * dentro de el objeto, en caso de que no exista dicho telefono se retornara
+     * -1 indicando que no se encontró.
+     * @param telf sub-arraylist sobre la cual se hará la busqueda
+     * @param telefono telefono al cual se le hará la busqueda
+     * @return 
+     */
     public static int buscar_numero_local(ArrayList<String> telf,String telefono) {
         boolean found = false;
         int i;
@@ -105,7 +158,16 @@ public class Generadores {
             return -1;
         }
     }
-    
+    /**
+     * Este método muestra los contactos registrados hasta el momento en el archivo
+     * se pueden listar los contactos ya sea por nombre, alias, direccion o correo electrónico.<p>
+     * Si se realiza la busqueda por telefono solo se mostrará el contacto relacionado a ese número telefónico
+     * @param a archivo principal
+     * @param consulta valor con el cual se hará la busqueda
+     * @param tipo opcion de listado
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void listar(File a,String consulta,int tipo)throws ClassNotFoundException, IOException{
         ArrayList<Contacto> v = extraer(a);
         Contacto temporal;
@@ -150,7 +212,21 @@ public class Generadores {
         }
     }
     
+
+    /**
+     * Este método se encarga de dividir y traducir en subcadenas el texto
+     * generado al exportar los contactos, que se encuentran en un bloque de
+     * texto delimitado por corchetes "[]" y se divide internamente con comas
+     * y un espacio seguido ", " y agregar estas subcadenas como elementos de la
+     * sub-arraylist(contacto.telefono).<p>
+     * Este metodo solo se encarga de traducir el artibuto "telefono", para el
+     * resto de atributos esta el metodo "reconContacto".
+     * @see Generadores.reconContacto
+     * @param importarray array desde la cual se van a importar los telefonos
+     * @return 
+     */
     public static  ArrayList<String> reconTelf(String importarray){
+                
         ArrayList<String> telefonos = new ArrayList<>();
         ArrayList<Integer> index = new ArrayList<>();
         index.add(0);
@@ -178,7 +254,19 @@ public class Generadores {
         return telefonos;
     }
     
-    public static Contacto reconContacto(String importline){
+    /**
+     * Este método se encarga de dividir y traducir en subcadenas el texto
+     * generado al exportar los contactos, que se encuentran se divididas con 
+     * punto y coma ";" y agregar estas subcadenas como atributos de el 
+     * objeto(contatco).<p> 
+     * Este método solo reconoce los campos "nombre", "alias", "direccion"
+     * y "correo" directamente, para la traduccion del campo "telefono" se usa
+     * la funcion reconTelf.
+     * @see Generadores.reconTelf
+     * @param importline lineal de texto desde la cual se traduciran los datos
+     * @return 
+     */
+    public static Contacto reconContacto(String importline){        
         int[] indices = new int[4];
         Contacto importado = new Contacto();
         int subi=0;
@@ -201,6 +289,21 @@ public class Generadores {
         }
         return importado;
     }
+    
+    /**
+     * Este método se encarga de traducir y agregar uno a uno los contactos previamente
+     * exportados y reintegrarlos al archivo principal, si algún contacto a importar
+     * posee un numero telefónico relacionado a un contacto que ya se encuentre
+     * en el archivo, este será omitidio.<p>
+     * Este método no reescribe los contactos que se encuentren actualmente en
+     * el archivo, solo agrega los presentes en el archivo exportado.
+     * @see Generadores.reconContacto
+     * @see Generadores.reconTelf
+     * @param a archivo principal
+     * @param importadopath archivo desde el cual se van a importar los contactos
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void importar(File a,String importadopath) throws ClassNotFoundException, IOException {
         File importado = new File(importadopath);
         FileReader fr = null;
@@ -239,6 +342,17 @@ public class Generadores {
         }
     }
     
+    /**
+     * Este método se encarga de llevar a un archivo de texto plano, la información
+     * de los contactos almacenada hasta el momento en el archivo.<p>
+     * Los contactos en texto plano tendrán el siguiente formato:
+     * Nombre;Alias;[111, 222, ...];Direccion;Correo_electrónico<p>
+     * @see Contacto.toExport
+     * @param a archivo principal
+     * @param exportpath archivo sobre el cual se va a exportar
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void exportar(File a,String exportpath) throws ClassNotFoundException, IOException{;
         FileWriter fichero = null;
         PrintWriter pw = null;
@@ -260,9 +374,17 @@ public class Generadores {
         }
     }
     
+    /**
+     *Este método permite modificar total o parcialmente un elemento, o en caso
+     * de que el usuario lo desee también puede eliminar un contacto, se buscara
+     * el contacto a modificar estrictamente mediante el telefono del mismo.
+     * @param a archivo principal
+     * @param tipo numero de la opcion seleccionada
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void modificar(File a, int tipo) throws ClassNotFoundException, IOException{
         Scanner l = new Scanner(System.in);
-        Contacto modificar;
         String temporal = null;
         String busqueda = null;
         int op;
@@ -335,6 +457,17 @@ public class Generadores {
         }
     }
     
+    /**
+     *Este método se encarga de registrar los números telefónicos de un contacto
+     * teniendo en cuenta si se repiten o no, se puede guardar una cantidad
+     * indefinida de números telefonicos siempre y cuando sean diferentes.<p>
+     * tambien permite modificar los números telefonicos de un contacto.
+     * @param a archivo principal
+     * @param insercion elemento el cual se va a registrar y verificar
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static ArrayList<String> verificar_telefonos(File a, Contacto insercion) throws ClassNotFoundException, IOException{
         boolean condicion = true;
         String temp;
@@ -362,6 +495,13 @@ public class Generadores {
         return insercion.telefono;
     }
     
+    /**
+     * Este método se encarga de pedir en conjunto todos los datos de un contacto
+     * y agregar dicho contacto al archivo
+     * @param a archivo principal
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void crearcontacto(File a) throws ClassNotFoundException, IOException{
         Scanner l = new Scanner(System.in);
         boolean condicion = true;
@@ -381,6 +521,12 @@ public class Generadores {
         agregar(a, insercion);
     }
     
+
+    /**
+     * Este método muestra el menú principal y lee un número que representa la
+     * operacion que se desea realizar.
+     * @return 
+     */
     public static int mostrarmenu(){
         System.out.println("AGENDA 2.0 (la 1.0 se fue con mis ganas de vivir)");
         System.out.println("\tMENU");
@@ -396,6 +542,15 @@ public class Generadores {
         return l.nextInt();
     }
     
+    /**
+     * Este método usa el conjunto de los métodos anteriores y genera una agenda
+     * funcional, permitiendo agregar, eliminar, modificar, exportar, importar
+     * y listar los contactos almacenados en un archivo el cual se actualiza con
+     * cada acción.
+     * @param a archivo principal
+     * @throws ClassNotFoundException
+     * @throws IOException 
+     */
     public static void menu(File a) throws ClassNotFoundException, IOException{
         verificar(a);
         int tipo = 0,op = 0;
