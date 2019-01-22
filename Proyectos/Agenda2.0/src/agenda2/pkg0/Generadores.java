@@ -33,12 +33,18 @@ public class Generadores {
      * @param a archivo principal
      * @throws IOException 
      */
-    public static void verificar(File a) throws IOException{
+    public static void verificar(File a)
+    		throws IOException{
+
         ArrayList<Contacto> arreglo = new ArrayList<>();
+
         if(!a.exists()){
+
             escritura(a, arreglo);
+
         }
     }
+    
     
     /**
      * Este método extrae el arraylist de el archivo.
@@ -47,20 +53,31 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static ArrayList<Contacto> extraer(File a) throws ClassNotFoundException, IOException{
+    public static ArrayList<Contacto> extraer(File a)
+    		throws ClassNotFoundException, IOException{
+
         ObjectInputStream ois = null;
         ArrayList<Contacto> v = new ArrayList<>();
+
         try {
+
             FileInputStream fis = new FileInputStream(a);
             ois = new ObjectInputStream(fis);
             v = (ArrayList<Contacto>)ois.readObject();
+
         } catch (IOException e) {
+
             System.out.println("error");
+
         }finally{
+
             ois.close();
+
         }
+
         return v;
     } 
+    
     
     /**
      * Este método reescribe el arraylist sobre el archivo.
@@ -68,12 +85,17 @@ public class Generadores {
      * @param v arraylist principal
      * @throws IOException 
      */
-    public static void escritura(File a, ArrayList<Contacto> v)throws  IOException{
+    public static void escritura(File a, ArrayList<Contacto> v)
+    		throws  IOException{
+
         FileOutputStream fos = new FileOutputStream(a);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
+
         oos.writeObject(v);
         oos.close();
+
     }
+    
     
     /**
      * esta función extrae el arraylist del archivo le añade un nuevo
@@ -83,12 +105,18 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void agregar(File a, Contacto insercion) throws ClassNotFoundException, IOException {
+    public static void agregar(File a, Contacto insercion)
+    		throws ClassNotFoundException, IOException {
+
        ArrayList<Contacto> v;
+       verificar(a);
         v = extraer(a);
         v.add(insercion);
+
         escritura(a, v);
+
     }
+    
     
     /**
      * Este método extrae el arraylist del archivo le elimina un elemento
@@ -98,12 +126,20 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void eliminar(File a,int index) throws ClassNotFoundException, IOException{
+    public static void eliminar(File a,int index)
+    		throws ClassNotFoundException, IOException{
+
         ArrayList<Contacto> v;
+        verificar(a);
         v = extraer(a);
-        System.out.println("el elemento que se elimino fue: "+v.remove(index).toString());
+
+        System.out.println("el elemento que se elimino fue: "
+                +v.remove(index).toString());
+
         escritura(a, v);
+
     }
+    
     
     /**
      * esta función retorna el indice de un contacto relacionado a un telefono
@@ -113,26 +149,43 @@ public class Generadores {
      * @param telefono telefono al cual se le hará la busqueda
      * @return
      * @throws ClassNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
-    public static int buscar_numero(File a, String telefono) throws ClassNotFoundException, IOException{
+    public static int buscar_numero(File a, String telefono)
+    		throws ClassNotFoundException, IOException{
+        
+        verificar(a);
         ArrayList<Contacto> v = extraer(a);
         Contacto temporal;
+
         boolean found = false;
+
         for(int i = 0; i < v.size();i++){
+
             temporal = v.get(i);
+
             for(String tempo : temporal.telefono){
+
                 if(tempo.compareTo(telefono) == 0){
+
                     found = true;
                     break;
+
                 }
+
             }
             if(found){
+
                 return i;
+
             }
+
         }
+
         return -1;
+
     }
+    
     
     /**
      * Este método retorna el indice de un telefono buscado en un sub arraylist
@@ -142,74 +195,148 @@ public class Generadores {
      * @param telefono telefono al cual se le hará la busqueda
      * @return 
      */
-    public static int buscar_numero_local(ArrayList<String> telf,String telefono) {
+    public static int buscar_numero_local(ArrayList<String> telf
+    		,String telefono){
+
         boolean found = false;
         int i;
+
         for(i = 0; i<telf.size(); i++){
+
             if(telf.get(i).compareTo(telefono) == 0){
+
                     found = true;
                     break;
+
                 }
+
         }
+
         if(found){
+
             return i;
+
         }
+
         else{
+
             return -1;
+
         }
+
     }
+
+    
     /**
      * Este método muestra los contactos registrados hasta el momento en el archivo
-     * se pueden listar los contactos ya sea por nombre, alias, direccion o correo electrónico.<p>
-     * Si se realiza la busqueda por telefono solo se mostrará el contacto relacionado a ese número telefónico
+     * se pueden listar los contactos ya sea por nombre, alias, direccion o
+     * correo electrónico.<p>
+     * Si se realiza la busqueda por telefono solo se mostrará el contacto
+     * relacionado a ese número telefónico.
      * @param a archivo principal
      * @param consulta valor con el cual se hará la busqueda
      * @param tipo opcion de listado
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void listar(File a,String consulta,int tipo)throws ClassNotFoundException, IOException{
+    public static void listar(File a,String consulta,int tipo)
+    		throws ClassNotFoundException, IOException{
+        
+        verificar(a);
         ArrayList<Contacto> v = extraer(a);
         Contacto temporal;
         String temporalstr = null;
         boolean found = false;
         int index;
+
         switch (tipo) {
             case 5:
+
                 index = buscar_numero(a, consulta);
+
                 if(index<0){
+
                     System.out.println("no se encuentra ningun registro con este numero");
-                }
-                else{
+
+                }else{
+
                     System.out.println("Contacto encontrado");
                     System.out.println(v.get(index).toString());
-                }    break;
-            case 6:
-                System.out.println("Contactos actuales");
-                for(int i = 0; i<v.size();i++){
-                    System.out.println(v.get(i).toString());
-                }   break;   
-            default:
-                System.out.println("Contactos encontrados");
-                for(int i = 0; i<v.size();i++){
-                    temporal = v.get(i);
-                    switch(tipo){
-                        case 1:temporalstr = temporal.nombre; break;
-                        case 2:temporalstr = temporal.alias; break;
-                        case 3:temporalstr = temporal.direccion; break;
-                        case 4:temporalstr = temporal.correo; break;
-                        default:System.out.println("opcion no disponible");break;
-                    }
-                    if(consulta.compareTo(temporalstr) == 0){
-                        System.out.println(temporal.toString());
-                        found = true;
-                    }
+
                 }
-                if(!found){
-                    System.out.println("no se encuentran registros");
+
+                break;
+
+            case 6:
+
+                System.out.println("Contactos actuales");
+
+                for(int i = 0; i<v.size();i++){
+
+                    System.out.println(v.get(i).toString());
+
                 }
                 break;
+
+            default:
+
+                System.out.println("Contactos encontrados");
+
+                for(int i = 0; i<v.size();i++){
+
+                    temporal = v.get(i);
+
+                    switch(tipo){
+
+                        case 1:
+
+                        	temporalstr = temporal.nombre;
+
+                        	break;
+
+                        case 2:
+
+                        	temporalstr = temporal.alias;
+
+                        	break;
+
+                        case 3:
+
+                        	temporalstr = temporal.direccion;
+
+                        	break;
+
+                        case 4:
+
+                        	temporalstr = temporal.correo;
+
+                        	break;
+
+                        default:
+
+                        	System.out.println("opcion no disponible");
+
+                        	break;
+                    }
+                    if(consulta.compareTo(temporalstr) == 0){
+
+                        System.out.println(temporal.toString());
+                        found = true;
+
+                    }
+
+                }
+
+                if(!found){
+
+                    System.out.println("no se encuentran registros");
+
+                }
+
+                break;
+
         }
+
     }
     
 
@@ -229,30 +356,48 @@ public class Generadores {
                 
         ArrayList<String> telefonos = new ArrayList<>();
         ArrayList<Integer> index = new ArrayList<>();
-        index.add(0);
         int i ;
+
+        index.add(0);
+
         for(i = 0; i< importarray.length(); i++){
+
             if(importarray.charAt(i) == ','){
+
                 index.add(i);
-            }  
+
+            }
+
         }
         
         for(i = 0; i<index.size(); i++){
+
             if(i == 0 && index.size()>1){
-                telefonos.add(importarray.substring(index.get(0),index.get(1)));
-            }
-            else if(i == 0 && index.size()==1){
+
+                telefonos.add(importarray.substring(index.get(0)
+                		,index.get(1)));
+
+            }else if(i == 0 && index.size()==1){
+
                 telefonos.add(importarray.substring(index.get(0)));
-            }
-            else if(i == index.size()-1){
+
+            }else if(i == index.size()-1){
+
                 telefonos.add(importarray.substring(index.get(i)+2));
+
+            }else{
+
+                telefonos.add(importarray.substring(index.get(i)+2
+                		,index.get(i+1)));
+
             }
-            else{
-                telefonos.add(importarray.substring(index.get(i)+2,index.get(i+1)));
-            }
+
         }
+
         return telefonos;
+
     }
+    
     
     /**
      * Este método se encarga de dividir y traducir en subcadenas el texto
@@ -266,29 +411,48 @@ public class Generadores {
      * @param importline lineal de texto desde la cual se traduciran los datos
      * @return 
      */
-    public static Contacto reconContacto(String importline){        
+    public static Contacto reconContacto(String importline){   
+
         int[] indices = new int[4];
         Contacto importado = new Contacto();
         int subi=0;
+
         for(int i = 0; i< importline.length(); i++){
+
             if(importline.charAt(i) == ';'){
+
                 indices[subi]=i;
                 subi++;
+
             }
             
         }
+
         importado.nombre = importline.substring(0, indices[0]);
-        importado.alias = importline.substring(indices[0]+1, indices[1]);
-        importado.direccion = importline.substring(indices[2]+1,indices[3]);
+
+        importado.alias = importline.substring(indices[0]+1
+        		, indices[1]);
+
+        importado.direccion = importline.substring(indices[2]+1
+        		,indices[3]);
+
         importado.correo = importline.substring(indices[3]+1);
+
         if((indices[1]+1)-(indices[2])!=-1){
-            importado.telefono = reconTelf(importline.substring(indices[1]+2,indices[2]-1));
-        }
-        else{
+
+            importado.telefono = reconTelf(importline.substring(indices[1]+2
+            		,indices[2]-1));
+
+        }else{
+
             importado.telefono = new ArrayList<>();
+
         }
+
         return importado;
+
     }
+    
     
     /**
      * Este método se encarga de traducir y agregar uno a uno los contactos previamente
@@ -304,43 +468,72 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void importar(File a,String importadopath) throws ClassNotFoundException, IOException {
+    public static void importar(File a,String importadopath)
+    		throws ClassNotFoundException, IOException{
+
+        verificar(a);
         File importado = new File(importadopath);
         FileReader fr = null;
         BufferedReader br = null;
         boolean condicion = true;
         ArrayList<Contacto> v = extraer(a);
+
         if(importado.exists()){
+
             try {
+
                 Contacto temporal;
                 fr = new FileReader (importado);
                 br = new BufferedReader(fr);
                 String importline;
+
                 while((importline=br.readLine())!=null){
+
                    temporal = reconContacto(importline);
+
                    for(String tmp: temporal.telefono){
+
                        if(buscar_numero(a, tmp)>=0){
-                           System.out.println("el contacto a importar contiene un numero telefonico ya relacionado a otro contacto");
+
+	                       System.out.println("el contacto a importar contiene un numero"
+	                               +" telefonico ya relacionado a otro contacto");
                            condicion = false;
+
                            break;
+
                        }
+
                    }
+
                    if(condicion){
+
                        agregar(a, temporal);
-                   }                   
+
+                   }
+
                 }
-            }
-            catch(IOException | ClassNotFoundException e){
+
+            }catch(IOException | ClassNotFoundException e){
+
             }finally{
+
                 try{
-                    if( null != fr ){   
-                       fr.close();     
-                    }                  
-                }catch (IOException e2){ 
+
+                    if( null != fr ){
+
+                       fr.close();
+
+                    }
+
+                }catch (IOException e2){
+
                 }
+
             }
+
         }
     }
+    
     
     /**
      * Este método se encarga de llevar a un archivo de texto plano, la información
@@ -353,26 +546,45 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void exportar(File a,String exportpath) throws ClassNotFoundException, IOException{;
+    public static void exportar(File a,String exportpath)
+    		throws ClassNotFoundException, IOException{
+        
+        verificar(a);
         FileWriter fichero = null;
         PrintWriter pw = null;
         ArrayList<Contacto> v = extraer(a);
-        try
-        {
+
+        try{
+
             fichero = new FileWriter(exportpath);
             pw = new PrintWriter(fichero);
-            for (int i = 0; i < v.size(); i++)
+
+            for (int i = 0; i < v.size(); i++){
+
                 pw.println(v.get(i).toExport());
 
-        } catch (IOException e) {
-        } finally {
-            try {
-                if (null != fichero)
-                   fichero.close();
-            } catch (IOException e2) {
             }
+
+        } catch (IOException e) {
+
+        } finally {
+
+            try {
+
+                if (null != fichero){
+
+                   fichero.close();
+
+                }
+
+            } catch (IOException e2) {
+
+            }
+
         }
+
     }
+    
     
     /**
      *Este método permite modificar total o parcialmente un elemento, o en caso
@@ -383,55 +595,110 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void modificar(File a, int tipo) throws ClassNotFoundException, IOException{
+    public static void modificar(File a, int tipo)
+    		throws ClassNotFoundException, IOException{
+        
+        verificar(a);
         Scanner l = new Scanner(System.in);
         String temporal = null;
         String busqueda = null;
-        int op;
         ArrayList<Contacto> v = extraer(a);
+        int op;
+
         if(tipo == 7){
+
             System.out.println("ingrese el numero del contacto que desea eliminar");
-        }
-        else{
+
+        }else{
+
             System.out.println("ingrese el numero del contacto que desea modificar");
+
         }
+
         busqueda = l.nextLine();
         int index = buscar_numero(a, busqueda);
+
         if(index != -1){
+
             if(tipo != 5 && tipo != 6 && tipo != 7){
+
                 System.out.println("ingrese el elemento por el cual quiere reemplazar");
                 temporal = l.nextLine();
+
             }
+
             switch(tipo){
-                case 1:v.get(index).setNombre(temporal);break;
-                case 2:v.get(index).setAlias(temporal); break;
-                case 3:v.get(index).setDireccion(temporal);break;
-                case 4:v.get(index).setCorreo(temporal);break;
+
+                case 1:
+
+                	v.get(index).setNombre(temporal);
+
+                	break;
+
+                case 2:
+
+                	v.get(index).setAlias(temporal);
+
+                	break;
+
+                case 3:
+
+                	v.get(index).setDireccion(temporal);
+
+                	break;
+
+                case 4:
+
+                	v.get(index).setCorreo(temporal);
+
+                	break;
+
                 case 5:
+
                     System.out.println("Agregar numeros: 1\nReemplazar un numero: 2");
                     op = l.nextInt();
+
                     switch(op){
-                        case 1: v.get(index).setTelefono(verificar_telefonos(a, v.get(index))); break;
-                        case 2: 
+                        case 1:
+
+                        	v.get(index).setTelefono(verificar_telefonos(a
+                        			,v.get(index)));
+
+                        	break;
+
+                        case 2:
+
                             System.out.println("ingrese el numero que desea cambiar");
                             l.nextLine();
                             temporal = l.nextLine();
                             int sub = buscar_numero_local(v.get(index).telefono, temporal);
+
                             if(sub>=0){
+
                                 v.get(index).telefono.remove(sub);
                                 System.out.println("capturando el nuevo numero");
-                                v.get(index).setTelefono(verificar_telefonos(a, v.get(index)));
-                            }
-                            else{
+                                v.get(index).setTelefono(verificar_telefonos(a,v.get(index)));
+
+                            }else{
+
                                 System.out.println("el elemento no se encontro");
+
                             }
+
                             break;
+
                         default:
+
                             System.out.println("opcion no disponible");
+
                             break;
+
                     }
+
                     break;
+
                 case 6:
+
                     System.out.println("ingrese el nuevo nombre");
                     v.get(index).setNombre(l.nextLine());
                     System.out.println("ingrese el nuevo alias");
@@ -442,20 +709,34 @@ public class Generadores {
                     v.get(index).setCorreo(l.nextLine());
                     v.get(index).telefono = new ArrayList<>();
                     v.get(index).setTelefono(verificar_telefonos(a,v.get(index)));
+
                     break;
+
                 case 7:
+
                     System.out.println("el elemento que se elimino fue:\n" + v.remove(index).toString());
+
                     break;
+
                 default:
+
                     System.out.println("opcion no disponible");
+
                     break;
+
             }
+            
+            verificar(a);
             escritura(a, v);
-        }
-        else{
+
+        }else{
+
             System.out.println("el contacto no se encontro");
+
         }
+
     }
+    
     
     /**
      *Este método se encarga de registrar los números telefónicos de un contacto
@@ -468,32 +749,53 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static ArrayList<String> verificar_telefonos(File a, Contacto insercion) throws ClassNotFoundException, IOException{
+    public static ArrayList<String> verificar_telefonos(File a, Contacto insercion)
+    		throws ClassNotFoundException, IOException{
+
         boolean condicion = true;
         String temp;
         Scanner l = new Scanner(System.in);
-        while (condicion) { 
+
+        while (condicion){
+
             System.out.println("ingrese un numero telefonico valido");
             temp = l.nextLine();
+
             if(buscar_numero(a, temp) == -1){
+
                 condicion = insercion.Pedirtelefonos(temp);
+
                 if(!condicion){
+
                     System.out.println("desea ingresar otro numero telefonico?\nsi: true\tno: false");
                     condicion = l.nextBoolean();
+
                 }
-            }
-            else{
+
+            }else{
+
                 System.out.println("EL NUMERO YA ESTA ASOCIADO A OTRO CONTACTO");
+
                 if(insercion.telefono.size()>0){
+
                     System.out.println("Desea no modificar mas los telefonos del contacto?\nsi: true\tno: false");
+
                     if(l.nextBoolean()){
+
                         break;
+
                     }
+
                 }
+
             }
+
         }
+
         return insercion.telefono;
+
     }
+    
     
     /**
      * Este método se encarga de pedir en conjunto todos los datos de un contacto
@@ -502,23 +804,33 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void crearcontacto(File a) throws ClassNotFoundException, IOException{
+    public static void crearcontacto(File a)
+    		throws ClassNotFoundException, IOException{
+
         Scanner l = new Scanner(System.in);
         boolean condicion = true;
         String temp;
         Contacto insercion = new Contacto();
+
         System.out.println("ingrese el nombre de contacto");
         insercion.setNombre(l.nextLine());
+
         System.out.println("ingrese el alias de contacto");
         insercion.setAlias(l.nextLine());
+
         System.out.println("ingrese la direccion del contacto");
         insercion.setDireccion(l.nextLine());
+
         System.out.println("ingrse el correo electronico de contacto");
         insercion.setCorreo(l.nextLine());
+
         insercion.telefono = new ArrayList<>();
         System.out.println("EL CAMPO DE TELEFONOS ES OBLIGATORIO Y NO PUEDE ESTAR REPETIDO");
         insercion.setTelefono(verificar_telefonos(a, insercion));
+        
+        verificar(a);
         agregar(a, insercion);
+
     }
     
 
@@ -528,6 +840,7 @@ public class Generadores {
      * @return 
      */
     public static int mostrarmenu(){
+
         System.out.println("AGENDA 2.0 (la 1.0 se fue con mis ganas de vivir)");
         System.out.println("\tMENU");
         System.out.println("1.CREAR NUEVO CONTACTO");
@@ -538,9 +851,13 @@ public class Generadores {
         System.out.println("6.IMPORTAR CONTACTOS");
         System.out.println("7.SALIR");
         System.out.println("ingrese una opcion");
+
         Scanner l = new Scanner(System.in);
+
         return l.nextInt();
+
     }
+    
     
     /**
      * Este método usa el conjunto de los métodos anteriores y genera una agenda
@@ -551,52 +868,87 @@ public class Generadores {
      * @throws ClassNotFoundException
      * @throws IOException 
      */
-    public static void menu(File a) throws ClassNotFoundException, IOException{
+    public static void menu(File a)
+    		throws ClassNotFoundException, IOException{
+
         verificar(a);
+
         int tipo = 0,op = 0;
         String consulta = "";
         Scanner l = new Scanner(System.in);
         boolean condicion = true;
+
         while (condicion) {
+            
             op = mostrarmenu();
+            verificar(a);
+            
             switch(op){
+
                 case 1:
+
                     System.out.println("\tCREAR NUEVO CONTACTO");
                     crearcontacto(a);
+
                     break;
+
                 case 2:
+
                     System.out.println("\tLISTAR POR:\n1.nombre\n2.alias\n3.direccion\n4.correo\n5.telefono\n6.mostrar todos los contactos".toUpperCase());
                     System.out.println("ingrese una opcion:");
+
                     tipo = l.nextInt();
                     l.nextLine();
+
+                    verificar(a);
                     listar(a, consulta, tipo);
+
                     break;
+
                 case 3: 
+
                     System.out.println("\tOPCIONES PARA MODIFICAR\n1.nombre\n2.alias\n3.direccion\n4.correo\n5.telefono\n6.modificar por completo un contactos".toUpperCase());
                     System.out.println("ingrese una opcion:");
+
                     tipo = l.nextInt();
                     l.nextLine();
+                    
                     modificar(a, tipo);
+
                     break;
+
                 case 4:
+
                     System.out.println("\tELIMINAR UN CONTACTO");
                     modificar(a, 7);
+
                     break;
+
                 case 5:
+
                     System.out.println("\tEXPORTAR CONTACTOS");
                     System.out.println("ingrese el path del archivo al cual quiere exportar:");
+
                     consulta = l.nextLine();
                     exportar(a, consulta);
+
                     break;
+
                 case 6:
+
                     System.out.println("\tIMPORTAR CONTACTOS");
                     System.out.println("ingrese el path de el archivo que quiere importar:");
+
                     consulta = l.nextLine();
                     importar(a, consulta);
+
                     break;
+
                 case 7:
+
                     System.out.println("\tADIOS.");
                     condicion = false;
+                    
                     break;
             }            
         }
