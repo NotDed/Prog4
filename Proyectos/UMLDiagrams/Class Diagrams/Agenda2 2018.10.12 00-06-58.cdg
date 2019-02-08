@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Agenda2">
+  <ClassDiagramComponents>
+    <Class name="Contacto" package="agenda2.pkg0" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="nombre" type="String" visibility="protected"/>
+        <Field name="alias" type="String" visibility="protected"/>
+        <Field name="telefono" type="ArrayList&lt;String&gt;" visibility="protected"/>
+        <Field name="direccion" type="String" visibility="protected"/>
+        <Field name="correo" type="String" visibility="protected"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="String" name="nombre"/>
+          <Argument type="String" name="alias"/>
+          <Argument type="String" name="direccion"/>
+          <Argument type="String" name="correo"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="Pedirtelefonos" returnType="boolean" visibility="public">
+          <Argument type="String" name="temp"/>
+        </Method>
+        <Method name="getNombre" returnType="String" visibility="public"/>
+        <Method name="getAlias" returnType="String" visibility="public"/>
+        <Method name="getTelefono" returnType="ArrayList&lt;String&gt;" visibility="public"/>
+        <Method name="getDireccion" returnType="String" visibility="public"/>
+        <Method name="getCorreo" returnType="String" visibility="public"/>
+        <Method name="setNombre" returnType="void" visibility="public">
+          <Argument type="String" name="nombre"/>
+        </Method>
+        <Method name="setAlias" returnType="void" visibility="public">
+          <Argument type="String" name="alias"/>
+        </Method>
+        <Method name="setTelefono" returnType="void" visibility="public">
+          <Argument type="ArrayList&lt;String&gt;" name="telefono"/>
+        </Method>
+        <Method name="setDireccion" returnType="void" visibility="public">
+          <Argument type="String" name="direccion"/>
+        </Method>
+        <Method name="setCorreo" returnType="void" visibility="public">
+          <Argument type="String" name="correo"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+        <Method name="toExport" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Generadores" package="agenda2.pkg0" visibility="public" xPosition="320.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="verificar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+        </Method>
+        <Method name="extraer" returnType="ArrayList&lt;Contacto&gt;" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+        </Method>
+        <Method name="escritura" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="ArrayList&lt;Contacto&gt;" name="v"/>
+        </Method>
+        <Method name="agregar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="Contacto" name="insercion"/>
+        </Method>
+        <Method name="eliminar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="buscar_numero" returnType="int" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="String" name="telefono"/>
+        </Method>
+        <Method name="buscar_numero_local" returnType="int" visibility="public" isStatic="true">
+          <Argument type="ArrayList&lt;String&gt;" name="telf"/>
+          <Argument type="String" name="telefono"/>
+        </Method>
+        <Method name="listar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="String" name="consulta"/>
+          <Argument type="int" name="tipo"/>
+        </Method>
+        <Method name="reconTelf" returnType="ArrayList&lt;String&gt;" visibility="public" isStatic="true">
+          <Argument type="String" name="importarray"/>
+        </Method>
+        <Method name="reconContacto" returnType="Contacto" visibility="public" isStatic="true">
+          <Argument type="String" name="importline"/>
+        </Method>
+        <Method name="importar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="String" name="importadopath"/>
+        </Method>
+        <Method name="exportar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="String" name="exportpath"/>
+        </Method>
+        <Method name="modificar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="int" name="tipo"/>
+        </Method>
+        <Method name="verificar_telefonos" returnType="ArrayList&lt;String&gt;" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+          <Argument type="Contacto" name="insercion"/>
+        </Method>
+        <Method name="crearcontacto" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+        </Method>
+        <Method name="mostrarmenu" returnType="int" visibility="public" isStatic="true"/>
+        <Method name="menu" returnType="void" visibility="public" isStatic="true">
+          <Argument type="File" name="a"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Principal" package="agenda2.pkg0" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="agenda2.pkg0.Generadores" target="agenda2.pkg0.Contacto" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="agenda2.pkg0.Principal" target="agenda2.pkg0.Generadores"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

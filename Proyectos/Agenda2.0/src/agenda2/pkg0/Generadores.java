@@ -98,7 +98,7 @@ public class Generadores {
     
     
     /**
-     * esta función extrae el arraylist del archivo le añade un nuevo
+     * Este método extrae el arraylist del archivo le añade un nuevo
      * objeto(insercion) y finalmente lo reescribe sobre el archivo.
      * @param a archivo principal
      * @param insercion objeto que se desea insertar
@@ -142,7 +142,7 @@ public class Generadores {
     
     
     /**
-     * esta función retorna el indice de un contacto relacionado a un telefono
+     * Este método retorna el indice de un contacto relacionado a un telefono
      * en especifico en caso de que exista, de lo contrario se retornará -1
      * indicando que el telefono no se encontró.
      * @param a archivo principal
@@ -505,6 +505,7 @@ public class Generadores {
 
                    }
 
+        
                    if(condicion){
 
                        agregar(a, temporal);

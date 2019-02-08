@@ -26,8 +26,8 @@ public class Principal extends Generadores{
 
         File a;
         a = new File("agenda2.txt");
-	menu(a);       
-
+        menu(a);
+        
     }
 
 }
