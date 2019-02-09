@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package puzzle6.pkg0;
+package puzzle2.pkg0;
 
 /**
  *
  * @author Alejandro Serna Olarte <daniel.serna.olarte at gmail.com>
  */
-public class Puzzle60 {
+public class Puzzle20 {
 
     /**
      * @param args the command line arguments
