@@ -6,10 +6,25 @@
 
 package prueba;
 
+import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+
 /**
  * 
  * @author Alejandro Serna Olarte <daniel.serna.olarte at gmail.com>
  */
 public class Botones {
-
+    public static Boton gridBotones[][] = new Boton[4][4];
+    
+    public void controladores() {
+                ActionListener letra = new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    
+                }
+            };
+    }
 }
